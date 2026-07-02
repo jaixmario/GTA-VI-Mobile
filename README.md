@@ -22,10 +22,22 @@
 
 ---
 
+## 📸 Screenshots
+
+| Cinematic Loading Screen | Fatal Error Simulation |
+|:---:|:---:|
+| ![Screenshot 0](screenshots/screenshot0.jpeg) | ![Screenshot 1](screenshots/screenshot1.jpeg) |
+
+---
+
 ## 📂 Project Structure
 
 ```text
 GTAVI/
+├── screenshots/               # App previews
+│   ├── app.jpg.jpeg
+│   ├── screenshot0.jpeg
+│   └── screenshot1.jpeg
 ├── app/
 │   ├── src/
 │   │   ├── main/
