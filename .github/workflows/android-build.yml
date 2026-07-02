@@ -10,6 +10,8 @@ jobs:
   build:
     name: Build Signed Release APK
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
       - name: 1️⃣ Checkout code
@@ -44,8 +46,27 @@ jobs:
           KEY_PASSWORD:       ${{ secrets.KEY_PASSWORD }}
         run: ./gradlew assembleRelease
 
-      - name: 7️⃣ Upload APK
+      - name: 7️⃣ Upload APK to Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: app-release.apk
           path: app/build/outputs/apk/release/app-release.apk
+
+      - name: 8️⃣ Create GitHub Release
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ github.run_number }}
+          name: GTA VI Mobile Release v${{ github.run_number }}
+          files: app/build/outputs/apk/release/app-release.apk
+          body: |
+            ## GTA VI Android Concept (Prank)
+            
+            This release contains the latest signed APK for the GTA VI prank app.
+            
+            **Changes in this build:**
+            - ${{ github.event.head_commit.message }}
+            
+            **Download:** [app-release.apk](app-release.apk)
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
