@@ -24,12 +24,13 @@
 
 ## 📸 Screenshots
 
-<p align="center">
-  <img src="screenshots/app.jpg.jpeg" width="300" alt="App Home Screen">
-  <br>
-  <img src="screenshots/screenshot0.jpeg" width="400" alt="Cinematic Loading">
-  <img src="screenshots/screenshot1.jpeg" width="400" alt="Loading Screen Concept">
-</p>
+| App Home Screen |
+| :---: |
+| <img src="screenshots/app.jpg.jpeg" width="300"> |
+
+| Cinematic Loading Screens (Landscape) |
+| :---: |
+| <img src="screenshots/screenshot0.jpeg" width="400"> <img src="screenshots/screenshot1.jpeg" width="400"> |
 
 ---
 
