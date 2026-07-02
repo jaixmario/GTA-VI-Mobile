@@ -22,11 +22,11 @@
 
 ---
 
-## 📸 Screenshots
+## 📸 Screenshots (Horizontal View)
 
-| Cinematic Loading Screen | Fatal Error Simulation |
-|:---:|:---:|
-| ![Screenshot 0](screenshots/screenshot0.jpeg) | ![Screenshot 1](screenshots/screenshot1.jpeg) |
+| App Home Screen | Cinematic Loading | Loading Screen Concept |
+|:---:|:---:|:---:|
+| ![App](screenshots/app.jpg.jpeg) | ![Screenshot 0](screenshots/screenshot0.jpeg) | ![Screenshot 1](screenshots/screenshot1.jpeg) |
 
 ---
 
@@ -34,10 +34,6 @@
 
 ```text
 GTAVI/
-├── screenshots/               # App previews
-│   ├── app.jpg.jpeg
-│   ├── screenshot0.jpeg
-│   └── screenshot1.jpeg
 ├── app/
 │   ├── src/
 │   │   ├── main/
