@@ -22,11 +22,20 @@
 
 ---
 
-## 📸 Screenshots (Horizontal View)
+## 📸 Screenshots
 
-| App Home Screen | Cinematic Loading | Loading Screen Concept |
-|:---:|:---:|:---:|
-| ![App](screenshots/app.jpg.jpeg) | ![Screenshot 0](screenshots/screenshot0.jpeg) | ![Screenshot 1](screenshots/screenshot1.jpeg) |
+<p align="center">
+  <img src="screenshots/app.jpg.jpeg" width="300" alt="App Home Screen">
+  <br>
+  <i>App Home Screen & Icon</i>
+</p>
+
+<p align="center">
+  <img src="screenshots/screenshot0.jpeg" width="400" alt="Cinematic Loading">
+  <img src="screenshots/screenshot1.jpeg" width="400" alt="Loading Screen Concept">
+  <br>
+  <i>In-game Cinematic Loading Sequences (Landscape)</i>
+</p>
 
 ---
 
