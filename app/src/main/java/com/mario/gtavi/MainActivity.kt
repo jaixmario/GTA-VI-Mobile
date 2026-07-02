@@ -2,27 +2,17 @@ package com.mario.gtavi
 
 import android.media.MediaPlayer
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
 import android.view.SurfaceHolder
 import android.view.View
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
-import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.navigation.NavigationView
-import androidx.navigation.findNavController
-import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.navigateUp
-import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.navigation.ui.setupWithNavController
-import androidx.appcompat.app.AppCompatActivity
 import com.mario.gtavi.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
     private var mediaPlayer: MediaPlayer? = null
 
@@ -30,79 +20,18 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        setSupportActionBar(binding.appBarMain.toolbar)
+
+        // Hide ActionBar if it exists
+        supportActionBar?.hide()
 
         playIntroVideo()
-
-        binding.appBarMain.fab?.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null)
-                .setAnchorView(R.id.fab).show()
-        }
-
-        val navHostFragment =
-            (supportFragmentManager.findFragmentById(R.id.nav_host_fragment_content_main) as NavHostFragment?)!!
-        val navController = navHostFragment.navController
-
-        binding.navView?.let {
-            appBarConfiguration = AppBarConfiguration(
-                setOf(
-                    R.id.nav_transform, R.id.nav_reflow, R.id.nav_slideshow, R.id.nav_settings
-                ),
-                binding.drawerLayout
-            )
-            setupActionBarWithNavController(navController, appBarConfiguration)
-            it.setupWithNavController(navController)
-        }
-
-        binding.appBarMain.contentMain.bottomNavView?.let {
-            appBarConfiguration = AppBarConfiguration(
-                setOf(
-                    R.id.nav_transform, R.id.nav_reflow, R.id.nav_slideshow
-                )
-            )
-            setupActionBarWithNavController(navController, appBarConfiguration)
-            it.setupWithNavController(navController)
-        }
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        val result = super.onCreateOptionsMenu(menu)
-        // Using findViewById because NavigationView exists in different layout files
-        // between w600dp and w1240dp
-        val navView: NavigationView? = findViewById(R.id.nav_view)
-        if (navView == null) {
-            // The navigation drawer already has the items including the items in the overflow menu
-            // We only inflate the overflow menu if the navigation drawer isn't visible
-            menuInflater.inflate(R.menu.overflow, menu)
-        }
-        return result
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.nav_settings -> {
-                val navController = findNavController(R.id.nav_host_fragment_content_main)
-                navController.navigate(R.id.nav_settings)
-            }
-        }
-        return super.onOptionsItemSelected(item)
-    }
-
-    override fun onSupportNavigateUp(): Boolean {
-        val navController = findNavController(R.id.nav_host_fragment_content_main)
-        return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 
     private fun playIntroVideo() {
         val videoView = binding.videoView
         videoView.visibility = View.VISIBLE
         
-        // Hide UI and make it full screen
-        supportActionBar?.hide()
-        binding.drawerLayout?.visibility = View.GONE
-        binding.appBarMain.root.visibility = View.GONE
-        
+        // Make it full screen
         WindowCompat.setDecorFitsSystemWindows(window, false)
         WindowInsetsControllerCompat(window, binding.root).let { controller ->
             controller.hide(WindowInsetsCompat.Type.systemBars())
@@ -127,25 +56,37 @@ class MainActivity : AppCompatActivity() {
             })
 
             mediaPlayer?.setOnCompletionListener {
-                finishVideo()
+                showCrashPopup()
             }
         } catch (e: Exception) {
             e.printStackTrace()
-            finishVideo()
+            showCrashPopup()
         }
     }
 
-    private fun finishVideo() {
-        binding.videoView.visibility = View.GONE
-        binding.drawerLayout?.visibility = View.VISIBLE
-        binding.appBarMain.root.visibility = View.VISIBLE
-        supportActionBar?.show()
-        
-        WindowCompat.setDecorFitsSystemWindows(window, true)
-        WindowInsetsControllerCompat(window, binding.root).show(WindowInsetsCompat.Type.systemBars())
+    private fun showCrashPopup() {
+        val errors = listOf(
+            "ERR_GFX_D3D_INIT: Failed to initialize graphics driver.",
+            "OUT_OF_MEMORY: System heap exhausted while allocating 4GB for texture streaming.",
+            "GPU_TIMEOUT: The graphics processor has stopped responding.",
+            "CRITICAL_EXCEPTION: Illegal memory access at 0x00007FF7B3C2.",
+            "VRAM_OVERFLOW: Video memory limit exceeded. 12288MB requested.",
+            "THREAD_STUCK_IN_DEVICE_DRIVER: A fatal hardware error occurred."
+        ).shuffled()
 
-        mediaPlayer?.release()
-        mediaPlayer = null
+        val errorMessage = "GTA VI has encountered a critical error and needs to close.\n\n" +
+                "Error Codes:\n" + errors.take(3).joinToString("\n") +
+                "\n\nPress OK to exit and restart your device."
+
+        AlertDialog.Builder(this)
+            .setTitle("Grand Theft Auto VI - Fatal Error")
+            .setMessage(errorMessage)
+            .setCancelable(false)
+            .setPositiveButton("OK") { _, _ ->
+                finishAffinity()
+                System.exit(0)
+            }
+            .show()
     }
 
     override fun onDestroy() {
